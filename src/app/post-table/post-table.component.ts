@@ -25,9 +25,7 @@ export class PostTableComponent implements OnInit, AfterViewInit {
   displayedColumns = ['userId','id','title','body']
   apicomm : any;
   comm : any;
-  // apicomm : any;
   comments : any = [];
-  // @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   expandedElement: any | null;
@@ -42,33 +40,12 @@ export class PostTableComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
       this.dataSourceFilters = new MatTableDataSource<Postinterface>(this.posts);      
     })
-    this.dataSource.filterPredicate = function(data, filter: string): boolean {
-      return data.title.toLowerCase().includes(filter);
-  };
-  console.log(this.dataSource.filterPredicate)
-    // this.getdata.getComments(1).subscribe((res)=>{
-    //   console.log(res)
-    // })
-    // this.dataSourceFilters.filterPredicate = function (record,filter) {
-    //   // debugger;
-    //   var map = new Map(JSON.parse(filter));
-    //   let isMatch = false;
-    //   for(let [key,value] of map){
-    //     isMatch = (value=="title") || (record[key as keyof Postinterface] == value); 
-    //     if(!isMatch) return false;
-    //   }
-    //   // console.log(isMatch)
-    //   return isMatch;
-    // }
-    // console.log(this.dataSourceFilters.filterPredicate)
+    
   }
   ngAfterViewInit(){
     this.dataSource.sort = this.sort;
-    // console.log(this.sort)
   }
-  ngDoCheck(){
-    // console.log(this.sort)
-  }
+  
   getcomments(e : any){
     this.apicomm = null;
     this.comm = null;
@@ -80,20 +57,16 @@ export class PostTableComponent implements OnInit, AfterViewInit {
             this.comm = res[i].body;
             this.comments.push(this.comm);
           }
-          this.apicomm = [this.comments]
+          this.apicomm = [this.comments];
     }
     })
 
   }
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value; 
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  //   console.log(this.dataSource.filter)
-  //   console.log(this.dataSource.filterPredicate)
-  // }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filterPredicate = (data: Postinterface, filter: string) =>
+      data.title.trim().toLowerCase().includes(filter);
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    // console.log(this.dataSourceFilters)
+  
   }
 }
