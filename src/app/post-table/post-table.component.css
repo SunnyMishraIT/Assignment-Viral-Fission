@@ -25,7 +25,6 @@ table {
   
   .example-element-diagram {
     min-width: 80px;
-    border: 2px solid black;
     padding: 8px;
     font-weight: lighter;
     margin: 8px 0;
@@ -44,5 +43,9 @@ table {
   
   .example-element-description-attribution {
     opacity: 0.5;
+  }
+  .example-element-detail.expanded .comment-list {
+    max-height: 300px; /* adjust the height as needed */
+    overflow-y: auto;
   }
   

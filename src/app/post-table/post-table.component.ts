@@ -13,7 +13,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('expanded', style({height: '325px'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
@@ -23,7 +23,7 @@ export class PostTableComponent implements OnInit, AfterViewInit {
   dataSourceFilters : MatTableDataSource<Postinterface> = new MatTableDataSource<Postinterface>;
   posts: any;
   displayedColumns = ['userId','id','title','body']
-  apicomm : any;
+  apicomm : any = [];
   comm : any;
   comments : any = [];
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
@@ -46,22 +46,16 @@ export class PostTableComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
   
-  getcomments(e : any){
-    this.apicomm = null;
-    this.comm = null;
-    this.comments = [];
+  getcomments(e: any) {
     let id = e.id;
-    this.getdata.getComments(id).subscribe((res : any)=>{
-      for (let i = 0; i < res.length; i++) {
-        if (res[i].body) {
-            this.comm = res[i].body;
-            this.comments.push(this.comm);
-          }
-          this.apicomm = [this.comments];
-    }
-    })
-
+    // console.log(id)
+    this.getdata.getComments(id).subscribe((res: any) => {
+      this.apicomm = res.map((r: any) => ({ ...r }));
+      // console.log(this.apicomm)
+    });
   }
+  
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filterPredicate = (data: Postinterface, filter: string) =>
